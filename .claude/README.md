@@ -14,8 +14,8 @@ Entry — [CLAUDE.md](../CLAUDE.md). `workflow` and `code-style` always load; ot
 | [docs/animation-principles.md](docs/animation-principles.md) | 12 animation principles in games and the check for every animation |
 | [docs/ui-principles.md](docs/ui-principles.md) | Nielsen heuristics, UX in Motion, game UX pillars and the check for every screen |
 | [docs/concept.md](docs/concept.md) | Current game concept |
-| [docs/roadmap-to-prototype.md](docs/roadmap-to-prototype.md) | Milestones, forks, acceptance criteria |
-| [docs/milestones-done.md](docs/milestones-done.md) | Accepted results |
+| `docs/roadmap-to-prototype.md` | Milestones, forks, acceptance criteria; created in the project ([workflow](rules/workflow.md)) |
+| `docs/milestones-done.md` | Accepted results; created in the project |
 | [docs/debts.md](docs/debts.md) | Open work, bugs and decisions |
 | [hooks/](hooks/roblox-mcp-reminders.json) | PreToolUse reminders for Studio MCP tools and the [principles](hooks/principles-reminders.json) |
 

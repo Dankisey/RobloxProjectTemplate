@@ -38,7 +38,7 @@ Updating the snapshot (Python 3.14+, `rojo`), from the repository clone root aft
 ## Starting a new project
 
 1. Copy the template place (`File → Save As` or a copy in Creator Hub) and **publish** it: saves and purchases need a published place.
-2. Copy `CLAUDE.md`, `.claude/` and `tools/` into the new project root. Fill in `CLAUDE.md`, the [concept](.claude/docs/concept.md) and the [plan](.claude/docs/roadmap-to-prototype.md).
+2. Copy `CLAUDE.md`, `.claude/` and `tools/` into the new project root. Fill in `CLAUDE.md` (name, PlaceId, GameId) and the [concept](.claude/docs/concept.md). The plan and accepted milestones are created with the agent at the first check.
 3. Check `SavesConfig.DataStoreName` and `GetProfileKey`: a second place of the same universe must match them, and `ServerStorage.ProfileStore` must be the same.
 4. `SavesConfig.KickOnLoadFail`: `true` for a gameplay place, `false` for a lobby or menu.
 5. Fill `DevelopersConfig` with the UserIds of developers and testers (admin panel and free developer purchases).
@@ -46,6 +46,8 @@ Updating the snapshot (Python 3.14+, `rojo`), from the repository clone root aft
 7. Run the documentation check:
 
        powershell -NoProfile -ExecutionPolicy Bypass -File tools/documentation/check-agent-docs.ps1
+
+8. The project is ready when the documentation check passes, the place compiles with 0 errors, Play has a clean console and the admin panel is visible to developers only.
 
 ## Before release
 

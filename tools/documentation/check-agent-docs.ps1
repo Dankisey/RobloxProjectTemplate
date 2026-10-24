@@ -79,7 +79,6 @@ function Test-Reference([string] $docPath, [string] $rawTarget, [bool] $fromRoot
 $required = @(
 	'CLAUDE.md', '.claude/README.md', '.claude/decisions.md', '.claude/pitfalls/README.md',
 	'.claude/docs/systems/README.md', '.claude/docs/concept.md', '.claude/docs/debts.md',
-	'.claude/docs/roadmap-to-prototype.md', '.claude/docs/milestones-done.md',
 	'.claude/docs/animation-principles.md', '.claude/docs/ui-principles.md',
 	'.claude/hooks/roblox-mcp-reminders.json', '.claude/hooks/roblox-mcp-reminder.py',
 	'.claude/hooks/principles-reminders.json', '.claude/hooks/principles-reminder.py', '.claude/settings.json'
@@ -194,3 +193,7 @@ if ($problems.Count -gt 0) {
 }
 Write-Output "OK: $ruleCount rules, $linkCount links and paths, indexes, reminders and language agree."
 Write-Output 'Documentation meaning and agreement with Source in Studio are checked separately.'
+
+$projectDocs = @('.claude/docs/roadmap-to-prototype.md', '.claude/docs/milestones-done.md')
+$missingProjectDocs = @($projectDocs | Where-Object { -not (Test-Path -LiteralPath (Join-Path $ProjectRoot $_) -PathType Leaf) })
+if ($missingProjectDocs.Count -gt 0) { Write-Output "Not created yet, agree the content with the user: $($missingProjectDocs -join ', ')" }

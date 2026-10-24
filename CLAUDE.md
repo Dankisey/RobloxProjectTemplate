@@ -2,11 +2,11 @@
 
 Claude Code instructions for `<Game name>`. Before any task, read this file in full and apply the Workflow section; then read the rules of the affected areas from the table below.
 
-> Template stub. Fill in everything in `<angle brackets>`, describe the game in [concept](.claude/docs/concept.md) and the milestones in the [plan](.claude/docs/roadmap-to-prototype.md). Delete this line.
+> Template stub. Fill in everything in `<angle brackets>` and describe the game in [concept](.claude/docs/concept.md). Delete this line.
 
 ## Project
 
-`<Game name>` — `<one paragraph: what the player does, why, and how a session ends>`. Concept — [concept.md](.claude/docs/concept.md), plan — [roadmap-to-prototype.md](.claude/docs/roadmap-to-prototype.md), open work — [debts.md](.claude/docs/debts.md).
+`<Game name>` — `<one paragraph: what the player does, why, and how a session ends>`. Concept — [concept.md](.claude/docs/concept.md), plan — roadmap-to-prototype.md in `.claude/docs/`, open work — [debts.md](.claude/docs/debts.md).
 
 The place is built from the `Empty Project` template: own DI, saves on service sections and player attributes (ProfileStore), monetization, admin panel, ragdoll, tools, GUI framework. How it works — [systems reference](.claude/docs/systems/README.md).
 
@@ -82,7 +82,7 @@ Chat replies use the user's language. All project text is English: documentation
 
 ## Documentation maintenance
 
-- Before a task read [debts](.claude/docs/debts.md) and the [plan](.claude/docs/roadmap-to-prototype.md); before gameplay — the [concept](.claude/docs/concept.md); before an alternative solution — [decisions](.claude/decisions.md).
+- Before a task read [debts](.claude/docs/debts.md) and the plan roadmap-to-prototype.md in `.claude/docs/`; before gameplay — the [concept](.claude/docs/concept.md); before an alternative solution — [decisions](.claude/decisions.md).
 - The root holds constraints and routes; rules — area requirements; systems — the actual structure; decisions — choices and reasons; pitfalls — symptom/cause/fix; debts — open work; plan — order and criteria. One fact in detail in one place.
 - Documentation is impersonal: no dates, no names of other projects, no history of who decided what.
 - Added or renamed a rule — update the table above. A new expensive MCP pitfall — also a line in the [hook reminders](.claude/hooks/roblox-mcp-reminders.json).

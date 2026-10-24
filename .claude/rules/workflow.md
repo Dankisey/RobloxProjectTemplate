@@ -10,7 +10,7 @@ Loaded in every session. Root — [CLAUDE.md](../../CLAUDE.md).
 
 ## Entry and decisions
 
-- Before a task read [debts](../docs/debts.md) and the [plan](../docs/roadmap-to-prototype.md); before gameplay — the [concept](../docs/concept.md). Read the chosen documents in full.
+- Before a task read [debts](../docs/debts.md) and the plan `docs/roadmap-to-prototype.md`; before gameplay — the [concept](../docs/concept.md). Read the chosen documents in full. A new project has neither the plan nor `docs/milestones-done.md`: at the first check, agree their content with the user and create them.
 - **Read the code first, then ask.** Read the relevant modules in full and grep for the real callers. Do not ask what can be read.
 - **Every task starts with planning together with the user** following the Workflow section of the [root](../../CLAUDE.md#workflow). You make no decisions for the user: an unapproved option, an assumption instead of an answer and silence as consent are forbidden. Before agreement — only reading the project and Studio and gathering facts.
 - Questions come **in batches of up to four**, each in plain words: what to decide, an example situation in the game, what the choice affects; options with a **difference in consequences** ("A gives this at that cost; B the other way round") and a recommendation with its reason.
