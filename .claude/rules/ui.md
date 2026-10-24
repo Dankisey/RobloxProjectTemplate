@@ -16,7 +16,7 @@ Input, tools and camera — [input-and-ui](input-and-ui.md). Every interface tas
 
 - **The source of truth is a prepared template in Studio.** Code only clones prepared templates (list items, popups, cards) and changes their content: `Text`, `Image`, `Visible`, `LayoutOrder`, state colors. Code never builds GUI with `Instance.new`; the only exception is `UIScale` for animations.
 - Static `Position`/`Size`/`AnchorPoint` are never overwritten by code; clones inherit them from the template.
-- `Position` and `Size` only in scale, offsets zero.
+- `Position` and `Size` only in scale, offsets zero; `UIStroke` only in `ScaledSize` ([pitfall](../pitfalls/roblox-studio.md#frames-and-images)). Exception: GUI in the world (`BillboardGui`, `SurfaceGui`), where scale works differently.
 - **Proportions through `SizeConstraint`** (`RelativeXX` / `RelativeYY`) on the frame itself, not `UIAspectRatioConstraint`; a square is a size in one axis with the matching `SizeConstraint`.
 - **Interactive elements are anchored in the center** (`AnchorPoint = 0.5, 0.5`): `UIScale` of the press animation scales from the anchor, otherwise the button slides into a corner. The position is set for this anchor in the layout.
 - Buttons never touch the visible edges of their window: keep an inner margin from the window frame.
