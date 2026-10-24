@@ -21,10 +21,6 @@ Entry — [CLAUDE.md](../CLAUDE.md). `workflow` and `code-style` always load; ot
 
 One fact in detail in one place, elsewhere a scope line and a link. A closed debt is deleted, a useful regression stays in pitfalls. Documentation is English and impersonal: no dates, no names of other projects.
 
-## Archive
-
-No git: closed plans go to `backup/`. Code rollback is the place version history. The archive sets no rules.
-
 ## Check
 
 After a documentation edit, from the root:

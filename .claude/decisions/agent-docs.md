@@ -6,7 +6,7 @@ A long file read at the start of a session is forgotten by the time of the mista
 
 - **One agent.** There is no `.codex/` and no `AGENTS.md`: mirrors double every documentation edit.
 - **No HTML site** — one reference for people and the agent, `docs/systems/`.
-- **No git** — closed plans go into `backup/` as copies; code rollback is the place version history.
+- **No git** — a closed plan leaves only its summary in milestones-done; code rollback is the place version history.
 - **`paths` barely works.** Code lives in Studio, there are no code files on disk, and `paths` frontmatter fires only on local documents. So `workflow` and `code-style` are rules **without** `paths` (Claude Code always loads them), the rest are read explicitly from the root table.
 - **The main pitfall trigger is a hook on the MCP tool** ([reminders](../hooks/roblox-mcp-reminders.json)): there is no file path to attach a reminder to.
 

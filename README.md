@@ -7,7 +7,6 @@ A Roblox project framework. The code lives in the template place: locally `Empty
 | [`CLAUDE.md`](CLAUDE.md) | project root; fill in the `<angle brackets>` |
 | [`.claude/`](.claude/README.md) | as a whole: rules, decisions, pitfalls, systems reference, principles, MCP and principles hooks, `settings.json` |
 | [`tools/documentation/`](tools/documentation/check-agent-docs.ps1) | documentation check |
-| `backup/` | not copied: the template's own archive |
 
 ## What the template has
 

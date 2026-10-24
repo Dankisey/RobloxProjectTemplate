@@ -1,6 +1,6 @@
 # Plan to prototype
 
-Milestones in order, forks and acceptance criteria. Only the user closes a milestone; an accepted one goes as a summary into [milestones-done](milestones-done.md), its plan as a copy into `backup/`.
+Milestones in order, forks and acceptance criteria. Only the user closes a milestone; an accepted one goes as a summary into [milestones-done](milestones-done.md) and its plan leaves this file.
 
 > Template stub: milestones are added after the [concept](concept.md) is agreed.
 

@@ -39,7 +39,6 @@ One task, one solution path. A second path for the same job is allowed only with
 | `.claude/` | Rules, decisions, pitfalls, reference, hooks; layout — [README](.claude/README.md) |
 | `tools/documentation/` | Documentation check |
 | `tools/rbxl-export/` | Export scripts from a saved `.rbxl` into a Rojo layout and verify with `rojo build` |
-| `backup/` | Archive of closed plans. Sets no rules |
 
 ## Which rules to read
 

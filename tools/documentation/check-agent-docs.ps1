@@ -148,7 +148,7 @@ foreach ($doc in $docs) {
 	foreach ($inline in [regex]::Matches($text, '(?<!`)`([^`\r\n]+)`(?!`)')) {
 		$target = $inline.Groups[1].Value.Trim()
 		if ($target -match '\s') { continue }
-		if ($target -match '^(?:\.claude|tools|backup)/' -or $target -eq 'CLAUDE.md') { Test-Reference $doc.FullName $target $true }
+		if ($target -match '^(?:\.claude|tools)/' -or $target -eq 'CLAUDE.md') { Test-Reference $doc.FullName $target $true }
 	}
 }
 
