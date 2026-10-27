@@ -36,6 +36,12 @@ Why a kick and rejoin instead of an in-place reset: an in-place reset needs a re
 
 Cost: Studio writes to the real `DataStore` — `Reset` in Studio wipes the account's real save; test the wipe itself with `SavesConfig.UseEmptySave = true`.
 
+## Leaderboards read player attributes, `Max` or `Set` per stat
+
+A board stat is a player attribute published by its section owner: the same value the HUD shows, so the numbers never drift, and no getter registry. `Max` writes through `math.max`, so a late server never lowers a record; `Set` follows a value that may drop and is written only while the player is on this server: after leave the next server may already have written a newer value, and `OrderedDataStore` keeps only an integer, without a version to compare.
+
+Cost: every board stat needs a published attribute; a `Set` change in the last `UpdatePeriod` before leaving reaches the board in the next session. Revision — when a stat must be exact on leave: a write from the save owner on session end.
+
 ## Free developer purchases are a server switch
 
 `Monetization:PromptProduct` / `PromptPass` grant the item without a prompt only when the `DeveloperPurchasesEnabled` attribute on the `Monetization` module is `true` and the buyer is in `DevelopersConfig`. The attribute is `false` in the place and resets to it on every new server; the admin panel `FreePurchases` button switches it through `Monetization:SetDeveloperPurchasesEnabled`. It works in Studio too.

@@ -14,6 +14,7 @@ Every animation is also checked against the [animation principles](../docs/anima
 - **`WeldConstraint` returns the part to the remembered place**, while `Size` changes honestly — recreate the weld after an edit.
 - **A weld outside `Workspace` does not move the welded part**: checking a pose on a clone outside the world gives a false angle. Check only joint parts.
 - **A welded model in `Workspace` is a rigid assembly**: the `CFrame` of one part moves everything instead of bending a joint. Compute numbers on a clone outside `Workspace`, the picture with a real `Animator` in the world.
+- **`PivotTo` over top level children leaves folder contents in place**: a `Folder` has no pivot, and a moved decor set left one folder's objects hundreds of studs away without an error. Move every `BasePart` (for anchored parts it is the same), and check by bounds.
 - **A model moved into an asset subfolder is silently lost by a hard path.** Search `Assets:FindFirstChild(name, true)` by a name from the config. The asset folder name differs from the world one, otherwise cleanup removes the templates.
 - **Preview in a `ViewportFrame`**: center by the bounding box, distance from the field of view:
   ```lua

@@ -33,6 +33,10 @@ A saved value is published by its section owner ([saves](saves.md#sections)); no
 |---|---|---|---|
 | `DeveloperPurchasesEnabled` | `ServerStorage.ServerCore.Monetization` | `Monetization:SetDeveloperPurchasesEnabled` | free developer purchases on this server; `false` in the place |
 | `DeveloperPurchasesEnabled` | the `AdminGui` clone in `PlayerGui` | `AdminService` | mirror of the module attribute for the panel label |
+| `Stat` | a board model with the `Leaderboard` tag | the level designer | the `LeaderboardsConfig.Stats` key |
+| `Loaded`, `EntryCount`, `LastUpdated`, `LeaderUserId` | a board model | `LeaderboardService` | the last page read; `LeaderUserId` only with a `Podium` |
+| `UserId`, `StatValue` | a board row | `LeaderboardService` | the row content |
+| `LeaderUserId` + tag `LeaderboardsConfig.ChampionTag` | the champion rig | `LeaderboardService` | `LeaderboardController` plays the dance on it |
 
 ## Tools and the use button
 

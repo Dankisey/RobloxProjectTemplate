@@ -30,7 +30,7 @@ end
 
 Consequence: **two modules with the same name in a core silently overwrite each other.**
 
-Infrastructure that must not be a service lives **next to** `ServiceTemplate`, not in `ServerCore`: `ProfileStore`, `SpawnerTemplate`, `ServerTypes`, `AdminGui`.
+Infrastructure that must not be a service lives **next to** `ServiceTemplate`, not in `ServerCore`: `ProfileStore`, `SpawnerTemplate`, `PathfindingAgent`, `SimplePath`, `ServerTypes`, `AdminGui`.
 
 ## GUI
 
@@ -49,3 +49,12 @@ SpawnerTemplate.InitSpawner(self, {Name, Config, LimitKey, TrySpawn, OnRemove, S
 ```
 
 Methods are copied onto the service directly: the service `__index` is already taken by `ServiceTemplate`.
+
+## `PathfindingAgent`
+
+One server NPC rig with a `Humanoid`. While the target is visible (three rays across the body width) it walks straight with `Humanoid:MoveTo`; after `BlockedTicksBeforePath` blocked checks in a row it follows a `SimplePath` path, computed again when the target moves `RepathDistance`, the path is blocked or the agent is stuck. Path computations share one budget per server frame. `new` sets the server as network owner of every rig part. Defaults — `PathfindingConfig`, per agent overrides — `new` options. Decisions (when to move, whom to chase) stay with the calling service; `RunLoop` ticks one agent's behavior, `SpawnerTemplate` ticks the population ([decision](../../decisions/framework.md#pathfindingagent-and-simplepath)).
+
+```lua
+local agent = PathfindingAgent.new({Template | Model, Parent, SpawnCFrame, WidthPart, IgnoredInstances, OnDied, ...})
+task.spawn(agent.RunLoop, agent, think, locomote, thinkInterval, locomotionStep)
+```

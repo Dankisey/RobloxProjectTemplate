@@ -20,6 +20,8 @@
 - **A 180° turn is not a mirror**: a turned decor block repeats the left side backwards. An exact mirror around x = 0 is an inversion of `CFrame` components: `CFrame.new(-x, y, z, r00, -r01, -r02, -r10, r11, r12, -r20, r21, r22)`; textures swap `Left`↔`Right` faces. Asymmetric meshes (wedges, unions) mirror only approximately.
 - **Measure decor size by part corners**, not centers: by centers a decor block looked about half as wide as by corners, and it did not fit.
 - Editing a map the human edits in parallel — take a fresh snapshot first: a snapshot from before their edits leads to wrong conclusions.
+- **Collision switched on around a player pushes them through the floor**: a wall that only toggles `CanCollide` traps whoever stands inside it, and the engine ejects them downward under the map, silently. Free the volume first: move out everyone with `part.CFrame:PointToObjectSpace(root.Position)` inside `Size / 2` plus the character size, then switch. The wall bottom stands on the ground, its width equals the passage.
+- **A moving visible wall and its collision are two parts**: while the visible part travels, a fast player slips under it. The invisible blocker stays in place and switches instantly; the visible part only moves and has no collision.
 
 ## Ragdoll
 

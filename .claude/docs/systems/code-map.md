@@ -1,20 +1,21 @@
 # Code map
 
-The template place has 96 scripts. Added or removed a service or controller — update the table and the types ([code-style](../../rules/code-style.md#types)).
+The template place has 109 scripts. Added or removed a service or controller — update the table and the types ([code-style](../../rules/code-style.md#types)).
 
 ## Place tree
 
 ```
 ServerScriptService.ServerBootstrap        → ServerCore:Start()
 ServerStorage
-  ServiceTemplate, ServerTypes, SpawnerTemplate, ProfileStore
+  ServiceTemplate, ServerTypes, SpawnerTemplate, ProfileStore,
+  PathfindingAgent, SimplePath           NPC movement, not services ([framework](framework.md#pathfindingagent))
   AdminGui                                 admin panel: AdminPanel (LocalScript), AdminConfig, CommandRequested
-  ServerCore/                              8 services, below
+  ServerCore/                              10 services, below
 ReplicatedStorage
-  ClientCore/                              14 controllers, below
+  ClientCore/                              16 controllers, below
   Modules/                                 ClientTypes, SharedTypes, UtilsTypes, ControllerTemplate,
-                                           Gizmos, UI/ (5), Utils/ (21)
-  Configs/                                 18 configs
+                                           Gizmos, UI/ (9), Utils/ (20)
+  Configs/                                 20 configs
   Remotes/, GameValues/ (empty)
   Assets/                                  GuideBeam, UI/ (Popups — the Cash example)
 StarterPlayer.StarterPlayerScripts.ClientBootstrap → ClientCore:Start()
@@ -38,6 +39,10 @@ Workspace                                  Baseplate, SpawnLocation, Debris
 | `ServerMessagesSender` | server messages into the player interface |
 | `Analytics` | `AnalyticsService` wrapper; reads the balance from `SoftCurrencyService` |
 | `RagdollService` | ragdoll state, immunity, stand up timer, collision groups |
+| `LeaderboardService` (+ `Leaderboard`, `Champion`) | global boards on `OrderedDataStore` from `LeaderboardsConfig.Stats`: reads player attributes, `Max` / `Set` writes, a page every `UpdatePeriod`; a memory store under `UseEmptySave` in Studio; off with empty `Stats` |
+| `Leaderstats` | mirrors `LeaderboardsConfig.Leaderstats` attributes into the Tab list (`Cash`); a value appears once its attribute exists |
+
+**Board model** (tag `Leaderboard`, attribute `Stat` = a `Stats` key): `GuiPart.BoardGui.LeaderboardFrame` with `ScrollingFrame.Template` (`Rank`, `Name`, `Value`), `Status`, optional `EmptyState`; optional `Podium` part with a `LeaderName` label inside turns the champion on. The template ships no board model.
 
 `ServerStorage.ProfileStore` is the MadStudio library (not the legacy `ProfileService`). It is updated as a whole, the file is not edited.
 
@@ -47,11 +52,11 @@ Outside DI on purpose ([decision](../../decisions/framework.md#admin-panel-outsi
 
 ## Client (`ReplicatedStorage.ClientCore`)
 
-`GuiController` (+ `MainGui` with `CashLabel` — the `Cash` attribute, `FadingGui`, `MessagesGui`, `PopupsGui`, `TooltipsGui`, `ConfirmationPromptGui`), `ButtonsInteractionsConnector` (`ConnectButton` — press with bounce, `ConnectHoldButton` — hold), `ToolsController` (tap anywhere — `ControlsConfig.Use.TapAnywhere`, off), `RagdollController` (+ `RagdollCamera`), `CameraController`, `CharacterMovementController` (`RefreshSpeed` keeps disabled movement disabled), `InputController` (cursor hidden only in `LockFirstPerson`), `SoundPlayer`, `BackgroundMusicController`, `CustomPromptsController` (+ `CustomPromptTemplate`, `GuiOpenPrompt`, `DevProductPrompt`), `TooltipsController`, `ClientMessagesSender` (shown by `MessagesHolder`), `GuideBeamController`, `ChatController`.
+`GuiController` (+ `MainGui` with `CashLabel` — the `Cash` attribute, `FadingGui`, `MessagesGui`, `PopupsGui`, `TooltipsGui`, `ConfirmationPromptGui`), `ButtonsInteractionsConnector` (`ConnectButton` — press with bounce, `ConnectHoldButton` — hold), `ToolsController` (tap anywhere — `ControlsConfig.Use.TapAnywhere`, off), `RagdollController` (+ `RagdollCamera`), `CameraController`, `CharacterMovementController` (`RefreshSpeed` keeps disabled movement disabled), `InputController` (cursor hidden only in `LockFirstPerson`), `SoundPlayer`, `BackgroundMusicController`, `CustomPromptsController` (+ `CustomPromptTemplate`, `GuiOpenPrompt`, `DevProductPrompt` — the `ActionLabel` shows the price through `PriceController`), `PriceController` (client Robux prices: one cache, retries, labels released on success), `LeaderboardController` (champion dance on every client; off with empty `DanceAnimationId`), `TooltipsController`, `ClientMessagesSender` (shown by `MessagesHolder`), `GuideBeamController`, `ChatController`.
 
 ## UI modules (`ReplicatedStorage.Modules.UI`)
 
-`GuiTemplate`, `AnimatedGuiTemplate`, `Widget`, `InfoPin`, `KeyBadge` (key label by `PreferredInput`).
+`GuiTemplate`, `AnimatedGuiTemplate`, `Widget`, `InfoPin`, `KeyBadge` (key label by `PreferredInput`), `ProgressBar`, `CooldownMask`, `Slider`, `GenerateViewport`. Not used by the template itself: they wait for the first game screen.
 
 ## Utilities (`ReplicatedStorage.Modules.Utils`)
 
@@ -77,13 +82,13 @@ LoadModules(folder)                      -- -> {[name] = module}, warns on faile
 FormatNumber(value)                      -- 999, 1.38K, 13.8K, 138K, -2.5K: three significant digits, truncation
 ```
 
-Others: `Event`, `Timer`, `GenerateGuid`, `GetChancedRewardIndex`, `Lerp`, `EvaluateGradient`, `FormatTime`, `DeepCopy`, `GetKeys`, `CubicBezier`, `TimeUtils`, `TranslateRange`, `MakeNumberDividers`, `GetPlayerProfileIcon`, `TryGetProductInfo`.
+Others: `Event`, `Timer`, `GenerateGuid`, `GetChancedRewardIndex`, `Lerp`, `EvaluateGradient`, `FormatTime`, `DeepCopy`, `GetKeys`, `CubicBezier`, `TimeUtils`, `TranslateRange`, `MakeNumberDividers`, `GetPlayerProfileIcon`. Product prices come only from `PriceController`.
 
 `Modules.Gizmos` lives **outside** `Utils` and is required lazily only in `InputController` under `TestingConfig.IsTesting` — [why](../../decisions/framework.md#gizmos-outside-utils).
 
 ## Configs (`ReplicatedStorage.Configs`)
 
-`CameraConfig`, `CollisionConfig` (groups `Character`, `Ragdoll`), `ConflictingGuisConfig` (empty), `ControlsConfig` (`Use` section: keys, `TapAnywhere`, labels), `DevProductsConfig` (empty), `DevelopersConfig` (developer UserIds: admin panel and free developer purchases; empty), `FadingConfig`, `GamepassesConfig` (`Attributes` empty), `InputConfig`, `MessagesConfig`, `NumberPostfixes`, `PopUpsConfig` (`BurstPopups` — popups that fly as a burst), `SavesConfig`, `SoundConfig` (`Sfx` with `PitchVariation`), `SoundNames`, `TestingConfig`, `ToolsConfig` (`Priority`, `Actions` empty), `WorldConfig` (water tag).
+`CameraConfig`, `CollisionConfig` (groups `Character`, `Ragdoll`), `ConflictingGuisConfig` (empty), `ControlsConfig` (`Use` section: keys, `TapAnywhere`, labels), `DevProductsConfig` (empty), `DevelopersConfig` (developer UserIds: admin panel and free developer purchases; empty), `FadingConfig`, `GamepassesConfig` (`Attributes` empty), `InputConfig`, `LeaderboardsConfig` (`Stats` empty, `Leaderstats` — `Cash`, texts, rank colors), `MessagesConfig`, `NumberPostfixes`, `PathfindingConfig` (`PathfindingAgent` defaults), `PopUpsConfig` (`BurstPopups` — popups that fly as a burst), `SavesConfig`, `SoundConfig` (`Sfx` with `PitchVariation`), `SoundNames`, `TestingConfig`, `ToolsConfig` (`Priority`, `Actions` empty), `WorldConfig` (water tag).
 
 ## Interface style
 
@@ -95,5 +100,7 @@ The template knows no game, so these stay empty until a project fills them:
 
 - `ClickSound`, `HoverSound` have no id and stay silent (`SoundPlayer` guard); the id goes on the instance, `SoundConfig.Sfx` mirrors it for reference.
 - `ToolsConfig.Priority` and `Actions`: no tool is ever equipped, there is no on-screen use button.
+- `LeaderboardsConfig.Stats` and the board model: a game adds a stat entry, publishes its attribute and places a tagged board.
+- No NPC rig uses `PathfindingAgent`: a game creates agents from its own service.
 - `GamepassesConfig.Attributes`, `DevProductsConfig`, `DevelopersConfig`, `ConflictingGuisConfig`; `Assets.UI.Popups` has only the `Cash` example.
 - The game icon and name in Creator Hub.

@@ -24,6 +24,12 @@ Everything in `ServerCore` becomes a service, and the population template is att
 
 Player attributes replicate for free. A remote for showing a value is an extra network round trip and a second source of truth. If the save is not read, the counter shows `...`, not `0`: a zero reads as lost progress.
 
+## Robux prices on the client, one cache
+
+`PriceController` asks `MarketplaceService:GetProductInfoAsync` on the client: only there the price matches the player's economic region. One entry per type and id, one background loop per entry with a finite retry schedule; a label is held only until the price arrives. A UI that renders every frame does not restart requests, and destroyed screens do not leak.
+
+Cost: the server never knows the shown price, so it never trusts one from the client. Revision — when a purchase must grant exactly what was shown: a server snapshot of the offer, not the client price.
+
 ## A new module only when it pays
 
 A module appears when it removes duplication from two or more places or cuts an independent responsibility out of a file of 300+ lines. Modules of 20–40 lines for neatness cost more than they give. A responsibility that reads the parent's internals goes into a nested module behind the parent's API.
@@ -35,3 +41,12 @@ A module appears when it removes duplication from two or more places or cuts an 
 Why: maximum protection — a regular player never downloads the layout, the code or the command names; a controller in `ClientCore` and a config in `Configs` would replicate to everyone. A remote inside a `PlayerGui` clone is seen only by its owner. The protection itself is the server check, not secrecy.
 
 Cost: a second path for client code outside DI — a `LocalScript` without `Initialize` and injections; `ButtonsInteractionsConnector` is taken as the live singleton through `require`, so delivery waits for `IsClientInitialized`. `AdminConfig` lives outside `Configs` and is not in `_configs`. Revision — when there is more than one such panel: a shared mechanism for server-delivered GUI.
+
+## `PathfindingAgent` and `SimplePath`
+
+`PathfindingAgent` is an object per NPC, not a service: a game may run many agents from one service, and the framework would turn a `ServerCore` child into a singleton. It lives next to `ServiceTemplate` with the third-party `SimplePath` (MIT) in `ServerStorage`: only the server moves NPCs, clients never get the code.
+
+- **`SimplePath` carries a local patch:** `Destroy` walked the event dictionary with `ipairs` and leaked five `BindableEvent`s per agent, `Stopped` fired a missing field. A marker line at the top keeps the patch through an upstream update.
+- **The server owns the rig physics** (`SetNetworkOwner(nil)` in `new`): otherwise the nearest client simulates the NPC, it jitters and a cheater can push it. Cost — NPC physics runs on the server.
+- **No chase logic** (target lead, aim overshoot, `Humanoid:Move`): the agent only reaches a point. A game that chases players adds it in its own service.
+- **`RunLoop` next to `SpawnerTemplate` is not a second path:** `SpawnerTemplate` ticks a population (limit, respawn), `RunLoop` ticks one agent's think and locomotion. A service may instead call `MoveToward` from `OnUpdate`. Revision — when every game drives agents only from `OnUpdate`: remove `RunLoop`.

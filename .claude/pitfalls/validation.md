@@ -2,7 +2,7 @@
 
 ## Syntax of the whole place without Play
 
-`loadstring` in Edit only compiles. The template norm: **96 scripts, 0 errors** — a reference, not a constant: in a game the number grows with every module. Text comes from the editor document: `.Source` of edited scripts lags, and for scripts written by `UpdateSourceAsync` it is empty and compiles into a false zero ([pitfall](roblox-studio.md#source-is-empty-or-stale--checks-read-geteditorsource)). The same applies to type checks and checksums.
+`loadstring` in Edit only compiles. The template norm: **109 scripts, 0 errors** — a reference, not a constant: in a game the number grows with every module. Text comes from the editor document: `.Source` of edited scripts lags, and for scripts written by `UpdateSourceAsync` it is empty and compiles into a false zero ([pitfall](roblox-studio.md#source-is-empty-or-stale--checks-read-geteditorsource)). The same applies to type checks and checksums.
 
 ```lua
 local ScriptEditorService = game:GetService("ScriptEditorService")
@@ -97,6 +97,14 @@ It is needed where the seconds of MCP latency cannot tell "pressed" from "releas
 **A probe that called `RequestSave` is not deleted right away**: the debounced ProfileStore write runs in the probe script's context, and a deleted probe fails it with `Transform function error Script that implemented this callback has been destroyed while calling callback`. This is an artifact of the probe, not the code: the next autosave writes normally. Keep such a probe alive longer than `SaveInterval`, or read the error this way.
 
 **A teleport before a hit runs ahead of the server**: a client probe put the character next to an object and hit a moment later — the server still saw it at the previous object far away, did not count the hit, and the client played the effect. The client owns character physics, and the server shows a long jump half way for a while (interpolation). Keep a pause between a teleport and an action; check "walked up to the object" with `Humanoid:MoveTo`, not a teleport.
+
+## Character speed is read on the client
+
+The client owns character physics and sets `WalkSpeed`; the server replica of `Humanoid.WalkSpeed` keeps its spawn value. A server read showed 16 while the client had the right curve value. Read speed with `datamodel_type = "Client"`.
+
+## Asset access is checked by loading
+
+Imported models bring `Sound` and image ids of another experience: they never play, and every join floods the console with "not authorized" lines that hide real errors. Check with `ContentProvider:PreloadAsync` over the place sounds, then `sound.IsLoaded`; images have no `IsLoaded`, read the console after the preload.
 
 ## Numeric metrics lie
 

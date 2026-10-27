@@ -48,6 +48,7 @@ Anything not shaped like `{Data, MetaData, GlobalUpdates}` goes to `overwritten 
 
 ## Sections
 
+- **A function called on an upgrade and on load must not change the save**: "bring the world to state X" also ran on join and shifted saved positions again on every rejoin — invisible in one session, unrecoverable after several. Such a function is idempotent and touches only the world; the save is written by the event that happened (the upgrade). Check: Play → stop → Play without the event, saved values unchanged.
 - **A service that changes a section must implement `GetSave`.** Without it the section leaves as read on join: in session everything works (the cache was updated), after a rejoin it rolls back — a cooldown did not start, a purchase vanished. The sign is a console warning about a section without `GetSave`.
 - **A purchase is written right away, with a debounce** (`RequestSave`, `SaveInterval`): the player leaves by teleport, and the next server reads almost immediately. The soft `DataStore` limit is about one write per several seconds per key; compare with the current limits in the Roblox documentation.
 - **A shared synchronous write point for everyone** (round end) on a full server gives an `UpdateAsync` peak; a short `AutoSavePeriod` spreads the writes.
